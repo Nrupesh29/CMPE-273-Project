@@ -1,5 +1,15 @@
 # Data Node
 
+## Connection Diagram
+
+<p align="center"><img src="http://nrupeshpatel.com/CMPE273/Images/dht11Connection.png" width="40%" /></p>
+
+<p align="center">
+     3.3v P1    --------    VCC (V) </br>
+      GND P6    --------    GND (G) </br>
+    GPIO4 P7    --------    DATA (S) </br>
+</p>
+
 ## Setup Instructions
 
 1. Install Mosquitto MQTT server
