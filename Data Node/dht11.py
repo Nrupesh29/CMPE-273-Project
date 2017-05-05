@@ -5,6 +5,7 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 
 import time
 import pigpio
+import paho.mqtt.client as mqtt
 
 
 class DHT11(object):
@@ -141,9 +142,14 @@ class DHT11(object):
 
 
 if __name__ == '__main__':
+    client = mqtt.Client()
+    client.connect("192.168.43.191", 1883, 60)
     pi = pigpio.pi()
     sensor = DHT11(pi, 4)
     for d in sensor:
+        msg = '"temperature": "{}", "humidity": "{}"'.format(d['temperature'], d['humidity'])
+        msg = "{"+msg+"}"
+        client.publish("iot/data", msg)
         print("temperature: {}".format(d['temperature']))
         print("humidity: {}".format(d['humidity']))
         time.sleep(1)
