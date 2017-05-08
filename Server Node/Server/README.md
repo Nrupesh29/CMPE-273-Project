@@ -12,7 +12,7 @@
     pi@raspberrypi:~$ cd paho-mqtt-1.1
     pi@raspberrypi:~/paho-mqtt-1.1 $ sudo python setup.py install
     ```
-3. Execute [server.py](server.py) file to get Temperature and Humidity data from Data Nodes
+3. Execute [start.sh](start.sh) file to Connect to AWS IoT and get Temperature and Humidity data from Data Nodes
     ```shell
-    pi@raspberrypi:~$ sudo python server.py
+    pi@raspberrypi:~$ ./start.sh
     ```
