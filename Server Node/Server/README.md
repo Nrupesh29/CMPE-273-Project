@@ -36,5 +36,5 @@
 
 12. Execute [start.sh](start.sh) file to Connect to AWS IoT and get Temperature and Humidity data from Data Nodes
     ```shell
-    pi@raspberrypi:~$ ./start.sh
+    pi@raspberrypi:~/connect_device_package $ ./start.sh
     ```
