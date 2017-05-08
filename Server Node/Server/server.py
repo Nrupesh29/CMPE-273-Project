@@ -1,9 +1,30 @@
+import paho.mqtt.client as mqtt
 from AWSIoTPythonSDK.MQTTLib import AWSIoTMQTTClient
 import sys
 import logging
 import time
 import getopt
+import json
 
+
+def on_connect(client, userdata, flags, rc):
+        client.subscribe("iot/data")
+
+def on_message(client, userdata, msg):
+        data = json.loads(msg.payload.decode())
+        device_id = data['serialNumber']
+        previous_temperature = data['prevTemperature']
+        temperature = data['temperature']
+        previous_humidity = data['prevHumidity']
+        humidity = data['humidity']
+        if previous_temperature != temperature or previous_humidity != humidity:
+                data['temperature'] = int(data['temperature']) 
+		data['humidity'] = int(data['humidity'])
+		data.pop('prevTemperature', None)
+                data.pop('prevHumidity', None)
+                myAWSIoTMQTTClient.publish("pi/data", json.dumps(data), 1)
+        
+  
 # Custom MQTT message callback
 def customCallback(client, userdata, message):
 	print("Received a new message: ")
@@ -89,9 +110,12 @@ myAWSIoTMQTTClient.connect()
 myAWSIoTMQTTClient.subscribe("pi/data", 1, customCallback)
 time.sleep(2)
 
-# Publish to the same topic in a loop forever
-loopCount = 0
+client = mqtt.Client()
+client.connect("localhost",1883,60)
+client.on_connect = on_connect
+client.on_message = on_message
+       
 while True:
-	myAWSIoTMQTTClient.publish("pi/data", "New Message " + str(loopCount), 1)
-	loopCount += 1
+        client.loop()
+	#myAWSIoTMQTTClient.publish("pi/data", data, 1)
 	time.sleep(1)
