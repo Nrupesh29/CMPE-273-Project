@@ -144,14 +144,18 @@ class DHT11(object):
 if __name__ == '__main__':
     pi_sn = "000001"
     loopcount = 0
+    prevTemperature = 0
+    prevHumidity = 0
     client = mqtt.Client()
     client.connect("192.168.43.191", 1883, 60)
     pi = pigpio.pi()
     sensor = DHT11(pi, 4)
     for d in sensor:
-        msg = '"serialNumber": "{:s}", "temperature": "{}", "humidity": "{}", "loop": "{}"'.format(pi_sn, d['temperature'], d['humidity'], loopcount)
+        msg = '"serialNumber": "{:s}", "prevTemperature": "{}", "temperature": "{}", "prevHumidity": "{}", "humidity": "{}", "loop": "{}"'.format(pi_sn, prevTemperature, d['temperature'], prevHumidity, d['humidity'], loopcount)
         msg = "{"+msg+"}"
         client.publish("iot/data", msg)
+        prevTemperature = d['temperature']
+        prevHumidity = d['humidity']
         loopcount += 1
         print("temperature: {}".format(d['temperature']))
         print("humidity: {}".format(d['humidity']))
