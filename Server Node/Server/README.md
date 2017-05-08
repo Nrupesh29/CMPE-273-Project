@@ -12,7 +12,29 @@
     pi@raspberrypi:~$ cd paho-mqtt-1.1
     pi@raspberrypi:~/paho-mqtt-1.1 $ sudo python setup.py install
     ```
-3. Execute [start.sh](start.sh) file to Connect to AWS IoT and get Temperature and Humidity data from Data Nodes
+    
+3. Go to [AWS IoT Console](https://console.aws.amazon.com/iotv2).
+
+4. Click on Connect in the left navigation bar.
+
+5. Click Get Started for Configuring a device.
+
+6. Choose Linux/OSX under the platform selection and Python for device SDK.
+
+7. Enter the Thing name and click Next Step.
+
+8. Download the connection kit for Linux/OSX.
+
+9. Unzip the connection kit on the device.
+
+10. Add execution permission to the script file in connection kit.
+    ```shell
+    pi@raspberrypi:~/connect_device_package $ chmod +x start.sh
+    ```
+    
+11. Replace start.sh file with the one in this repository.
+
+12. Execute [start.sh](start.sh) file to Connect to AWS IoT and get Temperature and Humidity data from Data Nodes
     ```shell
     pi@raspberrypi:~$ ./start.sh
     ```
