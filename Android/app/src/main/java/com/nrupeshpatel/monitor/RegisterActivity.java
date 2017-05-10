@@ -27,6 +27,7 @@ import com.amazonaws.services.iot.model.SnsAction;
 import com.amazonaws.services.iot.model.TopicRulePayload;
 import com.amazonaws.services.sns.AmazonSNS;
 import com.amazonaws.services.sns.AmazonSNSClient;
+import com.nrupeshpatel.monitor.helper.PrefManager;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -100,13 +101,31 @@ public class RegisterActivity extends AppCompatActivity {
 
     String emailText;
 
+    private PrefManager prefManager;
+
     CreateTopicRuleRequest createTopicRuleRequest;
 
     private static final Regions MY_REGION = Regions.US_WEST_2;
 
+    private void launchHomeScreen() {
+        prefManager.setFirstTimeLaunch(false);
+        startActivity(new Intent(RegisterActivity.this, MainActivity.class));
+        finish();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Checking for first time launch - before calling setContentView()
+        prefManager = new PrefManager(this);
+
+        if (!prefManager.isFirstTimeLaunch()) {
+            launchHomeScreen();
+            finish();
+        }
+
+
         setContentView(R.layout.activity_register);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -180,7 +199,7 @@ public class RegisterActivity extends AppCompatActivity {
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
             loading.dismiss();
-            startActivity(new Intent(RegisterActivity.this, MainActivity.class));
+            launchHomeScreen();
 
         }
 
@@ -255,14 +274,7 @@ public class RegisterActivity extends AppCompatActivity {
         return canonicalRequest.toString();
     }
 
-    /**
-     * Uses the previously calculated canonical request to create a single "String to Sign" for the request
-     * http://docs.aws.amazon.com/general/latest/gr/sigv4-create-string-to-sign.html
-     *
-     * @param canonicalRequestHash - SHA256 hash of the canonical request
-     * @param dateString           - The short 8 digit format for an x-amz-date
-     * @return The "String to Sign" used in Task 3
-     */
+
     private static String buildStringToSign(String canonicalRequestHash, String dateString) {
         StringBuilder stringToSign = new StringBuilder();
         stringToSign.append(AWS_SHA256_ALGORITHM).append("\n")
@@ -272,17 +284,6 @@ public class RegisterActivity extends AppCompatActivity {
         return stringToSign.toString();
     }
 
-    /**
-     * This function uses given parameters to create a derived key based on the secret key and parameters related to the call
-     * http://docs.aws.amazon.com/general/latest/gr/sigv4-calculate-signature.html
-     *
-     * @param dateString - The short 8 digit format for an x-amz-date
-     * @return The derived key used in creating the final signature
-     * @throws UnsupportedEncodingException
-     * @throws IllegalStateException
-     * @throws NoSuchAlgorithmException
-     * @throws InvalidKeyException
-     */
     private static byte[] buildDerivedKey(String dateString) throws InvalidKeyException, NoSuchAlgorithmException, IllegalStateException, UnsupportedEncodingException {
         StringBuilder signatureAWSKey = new StringBuilder();
         signatureAWSKey.append(KEY_QUALIFIER);
@@ -296,17 +297,6 @@ public class RegisterActivity extends AppCompatActivity {
         return derivedKey;
     }
 
-    /**
-     * Calculates the signature to put in the POST message header 'Authorization'
-     * http://docs.aws.amazon.com/general/latest/gr/sigv4-calculate-signature.html
-     *
-     * @param stringToSign - The entire "String to Sign" calculated in Task 2
-     * @param dateString   - The short 8 digit format for an x-amz-date
-     * @return The whole field to be used in the Authorization header for the message
-     * @throws InvalidKeyException
-     * @throws NoSuchAlgorithmException
-     * @throws UnsupportedEncodingException
-     */
     private static String buildAuthSignature(String stringToSign, String dateString) throws InvalidKeyException, NoSuchAlgorithmException, UnsupportedEncodingException {
         //Use derived key and "String to Sign" to make the final signature
         byte[] derivedKey = buildDerivedKey(dateString);
@@ -330,17 +320,6 @@ public class RegisterActivity extends AppCompatActivity {
         return authorizationValue.toString();
     }
 
-    /**
-     * Creates a printout of all information sent to the AGCOD service
-     *
-     * @param payload              - The payload sent to the AGCOD service
-     * @param canonicalRequest     - The entire canonical request calculated in Task 1
-     * @param canonicalRequestHash - SHA256 hash of canonical request
-     * @param stringToSign         - The entire "String to Sign" calculated in Task 2
-     * @param authorizationValue   - The entire authorization calculated in Task 3
-     * @param dateString           - The short 8 digit format for an x-amz-date
-     * @throws Exception
-     */
     private static void printRequestInfo(StringBuilder payload, String canonicalRequest, String canonicalRequestHash, String stringToSign, String authorizationValue, String dateString) throws Exception {
         //Print everything to be sent:
         System.out.println("\nPAYLOAD:");
@@ -377,15 +356,6 @@ public class RegisterActivity extends AppCompatActivity {
 
     }
 
-    /**
-     * Creates the authentication signature used with AWS v4 and sets the appropriate properties within the connection
-     * based on the parameters used for AWS signing. Tasks described below can be found at
-     * http://docs.aws.amazon.com/general/latest/gr/sigv4_signing.html
-     *
-     * @param conn    - URL connection to host
-     * @param payload - The payload to be used in the AWS signing that is sent to the AGCOD service
-     * @throws Exception
-     */
     private static void signRequestAWSv4(URLConnection conn, StringBuilder payload) throws Exception {
         if (conn == null) {
             throw new ConnectException();
@@ -437,14 +407,6 @@ public class RegisterActivity extends AppCompatActivity {
 
     }
 
-    /**
-     * Used to hash the payload and hash each previous step in the AWS signing process
-     *
-     * @param toHash - String to be hashed
-     * @return SHA256 hashed version of the input
-     * @throws NoSuchAlgorithmException
-     * @throws UnsupportedEncodingException
-     */
     private static String hash(String toHash) throws NoSuchAlgorithmException, UnsupportedEncodingException {
         String result = null;
         MessageDigest md = MessageDigest.getInstance(HASH_SHA256_ALGORITHM);
@@ -454,17 +416,6 @@ public class RegisterActivity extends AppCompatActivity {
         return result;
     }
 
-    /**
-     * Used to create a series of Hash-based Message Authentication Codes for use in the final signature
-     *
-     * @param data - String to be Hashed
-     * @param key  - Key used in signing
-     * @return Byte string of resultant hash
-     * @throws NoSuchAlgorithmException
-     * @throws InvalidKeyException
-     * @throws UnsupportedEncodingException
-     * @throws IllegalStateException
-     */
     private static byte[] hmac(String data, byte[] key) throws NoSuchAlgorithmException, InvalidKeyException, IllegalStateException, UnsupportedEncodingException {
         byte[] result = null;
         Mac mac = Mac.getInstance(HMAC_SHA256_ALGORITHM);
@@ -472,12 +423,7 @@ public class RegisterActivity extends AppCompatActivity {
         result = mac.doFinal(data.getBytes(UTF8_CHARSET));
         return result;
     }
-
-    /**
-     * Create timestamp for current time
-     *
-     * @return Stamp of current time
-     */
+    
     private static String timestamp() {
         String timestamp = null;
         Calendar cal = Calendar.getInstance();
