@@ -11,7 +11,7 @@ TWILIO_AUTH_TOKEN = os.environ.get("TWILIO_AUTH_TOKEN")
 
 
 def lambda_handler(event, context):
-    to_number = "+16288885656"
+    to_number = event['to_phone']
     from_number = "+18133799468"
     temperature = event['temperature']
 
@@ -28,7 +28,7 @@ def lambda_handler(event, context):
 
     # insert Twilio Account SID into the REST API URL
     populated_url = TWILIO_SMS_URL.format(TWILIO_ACCOUNT_SID)
-    post_params = {"To": to_number, "From": from_number, "Body": "Temperature reading is: " + temperature + " °C"}
+    post_params = {"To": to_number, "From": from_number, "Body": "Temperature reading is: " + str(temperature) + " °C"}
 
     # encode the parameters for Python's urllib
     data = parse.urlencode(post_params).encode()
