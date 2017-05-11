@@ -74,8 +74,8 @@ public class RegisterActivity extends AppCompatActivity {
     private static final String TERMINATION_STRING = "aws4_request";
 
     //User and instance parameters
-    private static final String awsKeyID = "AKIAJTEHDRD7N6DQYJWQ"; // Your KeyID
-    private static final String awsSecretKey = "HeWX/j4j2+ap6gJciaw5sHm2SncL/3yu8paX6DOb"; // Your Key
+    private static final String awsKeyID = ""; // Your Access Key
+    private static final String awsSecretKey = ""; // Your Secret Key
 
     //Service and target (API) parameters
     private static final String regionName = "us-west-2";//lowercase!
@@ -147,20 +147,20 @@ public class RegisterActivity extends AppCompatActivity {
 
                     clientId = UUID.randomUUID().toString();
 
-                    iotClient = new AWSIotClient(new BasicAWSCredentials("AKIAJTEHDRD7N6DQYJWQ", "HeWX/j4j2+ap6gJciaw5sHm2SncL/3yu8paX6DOb"));
+                    iotClient = new AWSIotClient(new BasicAWSCredentials(awsKeyId, awsSecretKey));
                     iotClient.setRegion(Region.getRegion(MY_REGION));
                     iotClient.setEndpoint("iot.us-west-2.amazonaws.com");
 
                     ArrayList<Action> ruleActions = new ArrayList<>();
                     Action action = new Action();
                     LambdaAction lambdaAction = new LambdaAction();
-                    lambdaAction.setFunctionArn("arn:aws:lambda:us-west-2:384585473965:function:SendSMS");
+                    lambdaAction.setFunctionArn("");//Lambda Function ARN
                     action.setLambda(lambdaAction);
 
                     SnsAction snsAction = new SnsAction();
                     snsAction.setMessageFormat(MessageFormat.RAW);
-                    snsAction.setRoleArn("arn:aws:iam::384585473965:role/SNS_ROLE");
-                    snsAction.setTargetArn("arn:aws:sns:us-west-2:384585473965:EmailAlert");
+                    snsAction.setRoleArn("");//Role ARN
+                    snsAction.setTargetArn("");//SNS Topic ARN
                     action.setSns(snsAction);
 
                     ruleActions.add(action);
@@ -174,7 +174,7 @@ public class RegisterActivity extends AppCompatActivity {
                     createTopicRuleRequest.setRuleName("SendAlert_" + clientId.replace("-", "_"));
                     createTopicRuleRequest.setTopicRulePayload(topicRulePayload);
 
-                    sendEmail = new AmazonSNSClient(new BasicAWSCredentials("AKIAJTEHDRD7N6DQYJWQ", "HeWX/j4j2+ap6gJciaw5sHm2SncL/3yu8paX6DOb"));
+                    sendEmail = new AmazonSNSClient(new BasicAWSCredentials(awsKeyId, awsSecretKey));
                     sendEmail.setRegion(Region.getRegion(Regions.US_WEST_2));
 
                     new AddPermissionToInvoke().execute();
