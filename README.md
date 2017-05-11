@@ -23,8 +23,28 @@
 - [License](#license)
 - [Team Members](#team-members)
 
-## Architecture Flow Diagram
+## Architecture Diagram
 <p align="center"><img src="http://nrupeshpatel.com/CMPE273/Images/arch.png" /></p>
+
+## Workflow
+
+1. Initialize Fog Nodes (Raspberry Pi with Sensors).
+
+2. Start the Server Node (Raspberry Pi connected to Cloud).
+
+3. Server node receives temperature and humidity data from Fog nodes every second.
+
+4. Server node processes the data locally.
+
+5. Relevant and processed data is sent to the Cloud (AWS IoT).
+
+6. AWS IoT stores the data into DynamoDB.
+
+7. User registers on the Mobile application using following details:
+
+    - Mobile Number
+    - Email Address
+    - Alert Threshold 
 
 ## API
 
