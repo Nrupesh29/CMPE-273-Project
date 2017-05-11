@@ -18,12 +18,22 @@
 ## Table of content
 
 - [Architecture Flow Diagram](#architecture-flow-diagram)
+- [API](#api)
 - [Services](#services)
 - [License](#license)
 - [Team Members](#team-members)
 
 ## Architecture Flow Diagram
 <p align="center"><img src="http://nrupeshpatel.com/CMPE273/Images/arch.png" /></p>
+
+## API
+
+### Temperature and Humidity API Calls
+
+| Request | Endpoint      |Description                 |
+|---------|--------------|------------------------------------------|
+| GET     | `{base_url}/readings` | List latest sensor data for all devices |
+| GET     | `{base_url}/reading/{device_id}` | List latest sensor data for device with id **`device_id`** |
 
 ## Services
 
