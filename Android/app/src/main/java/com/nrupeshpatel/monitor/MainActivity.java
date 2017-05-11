@@ -65,9 +65,9 @@ public class MainActivity extends AppCompatActivity {
 
     static final String LOG_TAG = MainActivity.class.getCanonicalName();
 
-    private static final String CUSTOMER_SPECIFIC_ENDPOINT = "a65bq3u1v5e88.iot.us-west-2.amazonaws.com";
+    private static final String CUSTOMER_SPECIFIC_ENDPOINT = "";//AWS IoT Endpoint
 
-    private static final String COGNITO_POOL_ID = "us-west-2:14e40de3-f1d2-423a-8f0c-26cd11d91d47";
+    private static final String COGNITO_POOL_ID = "";//Cognito Pool ID
 
     private static final Regions MY_REGION = Regions.US_WEST_2;
 
