@@ -46,6 +46,8 @@
     - Email Address
     - Alert Threshold 
 
+8. Alerts are sent using AWS SNS (Email) and Twilio API (SMS).
+
 ## API
 
 ### Temperature and Humidity API Calls
