@@ -48,7 +48,9 @@
     - Email Address
     - Alert Threshold 
 
-8. Alerts are sent using AWS SNS (Email) and Twilio API (SMS).
+8. Web and Mobile app receive Data updates when new data sent to cloud.
+
+9. Alerts are sent using AWS SNS (Email) and Twilio API (SMS).
 
 ## SCREENS
 
