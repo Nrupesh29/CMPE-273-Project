@@ -18,6 +18,8 @@
 ## Table of content
 
 - [Architecture Flow Diagram](#architecture-flow-diagram)
+- [Workflow](#workflow)
+- [Screens](#screens)
 - [API](#api)
 - [Services](#services)
 - [License](#license)
@@ -47,6 +49,13 @@
     - Alert Threshold 
 
 8. Alerts are sent using AWS SNS (Email) and Twilio API (SMS).
+
+## SCREENS
+
+<p align="center"><img src="http://nrupeshpatel.com/CMPE273/Images/SS1.png" width="22%" />&emsp;
+<img src="http://nrupeshpatel.com/CMPE273/Images/SS2.png" width="22%" />&emsp;
+<img src="http://nrupeshpatel.com/CMPE273/Images/SS3.png" width="22%" />&emsp;
+<img src="http://nrupeshpatel.com/CMPE273/Images/SS4.png" width="22%" /></p>
 
 ## API
 
