@@ -55,7 +55,11 @@
 <p align="center"><img src="http://nrupeshpatel.com/CMPE273/Images/SS1.png" width="22%" />&emsp;
 <img src="http://nrupeshpatel.com/CMPE273/Images/SS2.png" width="22%" />&emsp;
 <img src="http://nrupeshpatel.com/CMPE273/Images/SS3.png" width="22%" />&emsp;
-<img src="http://nrupeshpatel.com/CMPE273/Images/SS4.png" width="22%" /></p>
+<img src="http://nrupeshpatel.com/CMPE273/Images/SS4.png" width="22%" /><br><br><br>
+<img src="http://nrupeshpatel.com/CMPE273/Images/PSS1.png" /><br><br><br>
+<img src="http://nrupeshpatel.com/CMPE273/Images/PSS2.png" /><br><br><br>
+<img src="http://nrupeshpatel.com/CMPE273/Images/PSS3.png" />
+</p>
 
 ## API
 
